@@ -152,6 +152,15 @@ struct RootView: View {
         guard !started else { return }
         started = true
         director.reduceMotion = reduceMotion
+        // Debug / screenshot hook: `-startSpot table-1|cashier|management|hub` skips the intro.
+        if let id = UserDefaults.standard.string(forKey: "startSpot") {
+            showLogo = false
+            director.jumpToHub()
+            if let spot = CafeSpot(hotspotName: CafeLayout.hotspotPrefix + id) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { director.go(to: spot) }
+            }
+            return
+        }
         if settings.hasSeenIntro && settings.autoSkipIntro {
             showLogo = false
             director.jumpToHub()

@@ -48,11 +48,43 @@ jobs:
             -project ORMOR.xcodeproj \
             -scheme ORMOR \
             -destination "id=${{ steps.sim.outputs.udid }}" \
+            -derivedDataPath dd \
             CODE_SIGNING_ALLOWED=NO > build.log 2>&1
           status=$?
           grep -E "error:|Test Case .*(passed|failed)|Executed [0-9]+ test|\*\* (BUILD|TEST)" build.log
           echo "xcodebuild exit status: $status"
           exit $status
+
+      - name: Screenshots in the simulator
+        run: |
+          UDID=${{ steps.sim.outputs.udid }}
+          APP=$(find dd/Build/Products -name ORMOR.app -path '*iphonesimulator*' | head -1)
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl install "$UDID" "$APP"
+          mkdir -p shots
+          shot() { xcrun simctl io "$UDID" screenshot "shots/$1.png" >/dev/null; echo "captured $1"; }
+          # Full intro, first launch (Arabic)
+          xcrun simctl launch "$UDID" com.ormor.cafe
+          sleep 3;  shot 01-logo
+          sleep 5;  shot 02-exterior
+          sleep 3;  shot 03-doors
+          sleep 6;  shot 04-hub
+          for spot in table-1 table-2 cashier management; do
+            xcrun simctl terminate "$UDID" com.ormor.cafe || true
+            xcrun simctl launch "$UDID" com.ormor.cafe -startSpot "$spot"
+            sleep 7; shot "05-$spot"
+          done
+          xcrun simctl terminate "$UDID" com.ormor.cafe || true
+          xcrun simctl launch "$UDID" com.ormor.cafe -startSpot table-3 -language en
+          sleep 7; shot 06-table-3-en
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: shots
 
       - name: Upload log
         if: always()
