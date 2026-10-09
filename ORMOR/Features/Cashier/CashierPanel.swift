@@ -16,7 +16,6 @@ struct CashierPanel: View {
             switch section {
             case nil:
                 ScrollView {
-                ScrollView {
                     LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
                         ServiceTile(title: settings.t("توصيل", "Delivery"), symbol: "scooter",
                                     caption: settings.t("إلى باب منزلك", "To your door")) { open(.delivery) }
