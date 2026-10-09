@@ -381,8 +381,8 @@ enum CafeSceneBuilder {
         // Pastry display case to the left, photographed front panel
         let caseOffset = CafeLayout.displayCaseCenter - CafeLayout.counterCenter
         box([1.5, 0.75, 0.75], at: caseOffset + [0, 0.375, 0], M.pbr(0xB9BBBD, roughness: 0.2, metallic: 0.8), in: e)
-        box([1.5, 1.28, 0.7], at: caseOffset + [0, 0.75 + 0.64, -0.02], M.pbr(0x2A2520, roughness: 0.6), in: e)
-        panel(width: 1.5, height: 1.26, at: caseOffset + [0, 0.75 + 0.63, 0.34], M.glowTexture("tex_display_case"), in: e)
+        box([1.5, 1.28, 0.7], at: caseOffset + [0, 1.39, -0.02], M.pbr(0x2A2520, roughness: 0.6), in: e)
+        panel(width: 1.5, height: 1.26, at: caseOffset + [0, 1.38, 0.34], M.glowTexture("tex_display_case"), in: e)
         return e
     }
 

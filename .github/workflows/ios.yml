@@ -43,14 +43,16 @@ jobs:
 
       - name: Build and test
         run: |
-          set -o pipefail
+          set +e
           xcodebuild test \
             -project ORMOR.xcodeproj \
             -scheme ORMOR \
             -destination "id=${{ steps.sim.outputs.udid }}" \
-            CODE_SIGNING_ALLOWED=NO \
-            | tee build.log | grep -E "error:|warning: .*(deprecated|will be an error)|Test Case .*(passed|failed)|\*\* (BUILD|TEST)" || true
-          exit ${PIPESTATUS[0]}
+            CODE_SIGNING_ALLOWED=NO > build.log 2>&1
+          status=$?
+          grep -E "error:|Test Case .*(passed|failed)|Executed [0-9]+ test|\*\* (BUILD|TEST)" build.log
+          echo "xcodebuild exit status: $status"
+          exit $status
 
       - name: Upload log
         if: always()
