@@ -15,16 +15,20 @@ struct CashierPanel: View {
                      maxHeightFraction: 0.55) {
             switch section {
             case nil:
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
-                    ServiceTile(title: settings.t("توصيل", "Delivery"), symbol: "scooter",
-                                caption: settings.t("إلى باب منزلك", "To your door")) { open(.delivery) }
-                    ServiceTile(title: settings.t("استلام مسبق", "Pickup & advance"), symbol: "bag",
-                                caption: settings.t("اطلب الآن واستلم لاحقًا", "Order now, collect later")) { open(.pickup) }
-                    ServiceTile(title: settings.t("مناسبات وضيافة", "Catering & events"), symbol: "sparkles",
-                                caption: settings.t("تجهيز خارجي", "Off-site preparation")) { open(.catering) }
-                    ServiceTile(title: settings.t("القائمة", "Menu"), symbol: "menucard",
-                                caption: settings.t("المنتجات والأسعار", "Products and prices")) { open(.menu) }
+                ScrollView {
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
+                        ServiceTile(title: settings.t("توصيل", "Delivery"), symbol: "scooter",
+                                    caption: settings.t("إلى باب منزلك", "To your door")) { open(.delivery) }
+                        ServiceTile(title: settings.t("استلام مسبق", "Pickup & advance"), symbol: "bag",
+                                    caption: settings.t("اطلب الآن واستلم لاحقًا", "Order now, collect later")) { open(.pickup) }
+                        ServiceTile(title: settings.t("مناسبات وضيافة", "Catering & events"), symbol: "sparkles",
+                                    caption: settings.t("تجهيز خارجي", "Off-site preparation")) { open(.catering) }
+                        ServiceTile(title: settings.t("القائمة", "Menu"), symbol: "menucard",
+                                    caption: settings.t("المنتجات والأسعار", "Products and prices")) { open(.menu) }
+                    }
                 }
+                .scrollIndicators(.hidden)
                 Button {
                     if let url = URL(string: "tel:\(CafeInfo.phone)") { openURL(url) }
                 } label: {

@@ -68,8 +68,9 @@ jobs:
           shot() { xcrun simctl io "$UDID" screenshot "shots/$1.png" >/dev/null; echo "captured $1"; }
           # Full intro, first launch (Arabic)
           xcrun simctl launch "$UDID" com.ormor.cafe
-          sleep 3;  shot 01-logo
-          sleep 5;  shot 02-exterior
+          sleep 2;  shot 01-logo
+          sleep 3;  shot 01b-logo-filled
+          sleep 3;  shot 02-exterior
           sleep 3;  shot 03-doors
           sleep 6;  shot 04-hub
           for spot in table-1 table-2 cashier management; do

@@ -199,12 +199,12 @@ enum CafeSceneBuilder {
         panel(width: 0.5, height: 0.7, at: [-5.4, 2.0, -9.0], facingYaw: .pi / 2, M.glowTexture("tex_wall_art_1"), in: root)
 
         // Leaning mirror
-        let mirror = box([0.75, 1.95, 0.04], at: [3.85, 0.98, backZ + 0.25], M.pbr(0xDCDCDC, roughness: 0.03, metallic: 1), in: root)
+        let mirror = box([0.75, 1.95, 0.04], at: [3.55, 0.98, backZ + 0.25], M.pbr(0xDCDCDC, roughness: 0.03, metallic: 1), in: root)
         mirror.orientation = simd_quatf(angle: -0.12, axis: [1, 0, 0])
-        box([0.8, 2.0, 0.03], at: [3.85, 0.98, backZ + 0.23], M.pbr(0x2A2A2A, roughness: 0.4), in: root).orientation = mirror.orientation
+        box([0.8, 2.0, 0.03], at: [3.55, 0.98, backZ + 0.23], M.pbr(0x2A2A2A, roughness: 0.4), in: root).orientation = mirror.orientation
 
         // Potted ficus
-        let plantBase: SIMD3<Float> = [4.9, 0, backZ + 0.55]
+        let plantBase: SIMD3<Float> = [5.75, 0, backZ + 0.5]
         cylinder(height: 0.34, radius: 0.2, at: plantBase + [0, 0.17, 0], M.pbr(0xF4F2EE, roughness: 0.3), in: root)
         cylinder(height: 1.0, radius: 0.025, at: plantBase + [0, 0.8, 0], M.pbr(0x5B4632, roughness: 0.8), in: root)
         let leaf = M.pbr(0x4E7A2C, roughness: 0.7)

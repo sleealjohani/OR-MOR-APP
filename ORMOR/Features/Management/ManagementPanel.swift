@@ -17,11 +17,15 @@ struct ManagementPanel: View {
                     SupportFormView(topic: topic)
                 }
             } else {
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
-                    ForEach(SupportTopic.allCases) { t in
-                        ServiceTile(title: name(t), symbol: symbol(t)) { withAnimation(.snappy) { topic = t } }
+                ScrollView {
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
+                        ForEach(SupportTopic.allCases) { t in
+                            ServiceTile(title: name(t), symbol: symbol(t)) { withAnimation(.snappy) { topic = t } }
+                        }
                     }
                 }
+                .scrollIndicators(.hidden)
             }
         }
     }

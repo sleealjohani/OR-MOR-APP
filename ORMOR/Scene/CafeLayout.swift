@@ -85,7 +85,7 @@ enum CafeLayout {
     static let standingEye: Float = 1.62
 
     /// Resting viewpoint just inside the entrance.
-    static let hubPose = CameraPose.look(from: [0.1, 1.7, -0.7], at: [0.55, 1.15, -8.5], fov: 72)
+    static let hubPose = CameraPose.look(from: [0.1, 1.7, -0.7], at: [0.55, 1.15, -8.5], fov: 76)
 
     /// Poses for the opening fly-through: street → doors → inside → hub.
     static let introKeys: [CameraPose] = [
@@ -113,17 +113,32 @@ enum CafeLayout {
             return [
                 hubPose,
                 .look(from: [-1.2, 1.66, -5.2], at: [0.2, 1.3, -10.4], fov: 68),
-                .look(from: [counterCenter.x - 0.15, standingEye, counterCenter.z + 2.05],
-                      at: [counterCenter.x - 0.05, 1.05, counterCenter.z - 0.6], fov: 64),
+                framed(target: counterCenter + [0, 0.95, counterSize.z / 2], from: [counterCenter.x - 0.7, 1.72, counterCenter.z + 2.8], fov: 66),
             ]
         case .management:
             return [
                 hubPose,
                 .look(from: [2.3, 1.68, -4.6], at: [4.6, 1.3, -10.4], fov: 68),
-                .look(from: [managementDesk.x - 0.9, standingEye, managementDesk.z + 2.3],
-                      at: [managementDesk.x, 1.15, managementDesk.z - 0.3], fov: 62),
+                framed(target: managementDesk + [0, 1.0, 0.5], from: [managementDesk.x - 0.15, 1.72, managementDesk.z + 2.9], fov: 66),
             ]
         }
+    }
+
+    /// Fraction of the screen height (from the bottom) where a framed object should sit,
+    /// above the service panel that covers the lower half.
+    static let panelFramingHeight: Float = 0.76
+
+    /// Looks from `position` so that `target` appears horizontally centred at `screenHeight`
+    /// (0 = bottom edge, 1 = top edge) of a camera with vertical field of view `fov`.
+    static func framed(target: SIMD3<Float>, from position: SIMD3<Float>, fov: Float, screenHeight: Float = panelFramingHeight) -> CameraPose {
+        let flat = SIMD3<Float>(target.x - position.x, 0, target.z - position.z)
+        let distance = max(simd_length(flat), 0.01)
+        let direction = flat / distance
+        let elevation = atan2(target.y - position.y, distance)
+        let offset = atan((2 * screenHeight - 1) * tan(fov * .pi / 360))
+        let pitch = elevation - offset
+        let lookPoint = position + direction * cos(pitch) + SIMD3<Float>(0, sin(pitch), 0)
+        return .look(from: position, at: lookPoint, fov: fov)
     }
 
     /// Approach from the hub side, then rise and rotate into a true 90° overhead view of the tabletop.
@@ -155,7 +170,7 @@ enum CafeLayout {
     static func labelAnchor(for spot: CafeSpot) -> SIMD3<Float>? {
         switch spot {
         case .table(let n): return table(n).map { $0.position + [0, tableHeight + 0.35, 0] }
-        case .cashier: return counterCenter + [0, counterSize.y + 0.55, 0]
+        case .cashier: return counterCenter + [-1.75, counterSize.y + 0.7, 0.3]  // between display case and column, where it's visible
         case .management: return managementDesk + [0, 1.75, 0]
         default: return nil
         }
