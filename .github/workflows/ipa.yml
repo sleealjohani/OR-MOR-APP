@@ -1,0 +1,51 @@
+name: Unsigned IPA
+
+on:
+  push:
+    branches: [main, claude/cafe-prototype]
+  workflow_dispatch:
+
+concurrency:
+  group: ipa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ipa:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Xcode project
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
+      - name: Build for iPhone (Release, unsigned)
+        run: |
+          set +e
+          xcodebuild build \
+            -project ORMOR.xcodeproj \
+            -scheme ORMOR \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
+            -derivedDataPath ddr \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" > build-ipa.log 2>&1
+          status=$?
+          grep -E "error:|\*\* BUILD" build-ipa.log
+          exit $status
+
+      - name: Package IPA
+        run: |
+          APP=ddr/Build/Products/Release-iphoneos/ORMOR.app
+          test -d "$APP"
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          zip -qry ORMOR-unsigned.ipa Payload
+          ls -lh ORMOR-unsigned.ipa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ORMOR-unsigned-ipa
+          path: ORMOR-unsigned.ipa
