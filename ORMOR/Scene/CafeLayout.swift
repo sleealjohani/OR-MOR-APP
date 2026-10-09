@@ -113,13 +113,13 @@ enum CafeLayout {
             return [
                 hubPose,
                 .look(from: [-1.2, 1.66, -5.2], at: [0.2, 1.3, -10.4], fov: 68),
-                framed(target: counterCenter + [0, 0.95, counterSize.z / 2], from: [counterCenter.x - 0.7, 1.72, counterCenter.z + 2.8], fov: 66),
+                framed(target: counterCenter + [0, 0.95, counterSize.z / 2], from: [counterCenter.x - 1.4, 1.95, counterCenter.z + 3.7], fov: 66),
             ]
         case .management:
             return [
                 hubPose,
                 .look(from: [2.3, 1.68, -4.6], at: [4.6, 1.3, -10.4], fov: 68),
-                framed(target: managementDesk + [0, 1.0, 0.5], from: [managementDesk.x - 0.15, 1.72, managementDesk.z + 2.9], fov: 66),
+                framed(target: managementDesk + [0, 1.0, 0.5], from: [managementDesk.x - 0.45, 1.95, managementDesk.z + 3.3], fov: 66),
             ]
         }
     }
