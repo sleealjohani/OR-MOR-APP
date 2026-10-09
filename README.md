@@ -5,6 +5,10 @@ fly-through from the street into a 3D recreation of OR & MOR. You tap a real tab
 order, walk up to the cashier for delivery, pickup and catering, and visit the management desk for
 feedback and support.
 
+![Exterior, hub, overhead table, cashier and management views](docs/screenshots/prototype-overview.png)
+
+*Simulator screenshots from CI: exterior arrival, the hub, the 90° table view, the cashier and management.*
+
 This branch is the **first native iPhone prototype**. It covers the full core interaction:
 
 | Step | What happens |
@@ -35,8 +39,10 @@ In Xcode, select the **ORMOR** target → *Signing & Capabilities* → choose yo
 your iPhone. Use a real device to judge motion and lighting; the simulator renders RealityKit, but
 more slowly.
 
-Every push runs the build and unit tests on GitHub's macOS runners
-(`.github/workflows/ios.yml`).
+Every push runs the build and unit tests on GitHub's macOS runners and captures simulator
+screenshots of the intro and each spot (`.github/workflows/ios.yml`; see the *screenshots*
+artifact on each run). To open the app directly at a spot, pass a launch argument such as
+`-startSpot table-2`, `-startSpot cashier` or `-startSpot management`.
 
 ## Project layout
 
