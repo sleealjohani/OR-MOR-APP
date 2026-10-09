@@ -1,0 +1,59 @@
+name: ORMOR
+options:
+  bundleIdPrefix: com.ormor
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  ORMOR:
+    type: application
+    platform: iOS
+    sources:
+      - path: ORMOR
+    info:
+      path: ORMOR/Info.plist
+      properties:
+        CFBundleDisplayName: "OR & MOR"
+        CFBundleDevelopmentRegion: ar
+        CFBundleLocalizations: [ar, en]
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIRequiresFullScreen: true
+        UIAppFonts:
+          - ReemKufi.ttf
+          - NotoSansArabic-Regular.ttf
+          - NotoSansArabic-Bold.ttf
+          - NotoSerif-Regular.ttf
+          - NotoSerif-Bold.ttf
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ormor.cafe
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_UIStatusBarStyle: UIStatusBarStyleLightContent
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_PREVIEWS: YES
+  ORMORTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [ORMORTests]
+    dependencies:
+      - target: ORMOR
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  ORMOR:
+    build:
+      targets:
+        ORMOR: all
+        ORMORTests: [test]
+    test:
+      targets: [ORMORTests]
