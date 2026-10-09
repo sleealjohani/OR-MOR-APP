@@ -90,32 +90,38 @@ struct LogoIntroView: View {
         if reduceMotion {
             fill = 1; stroke = 1; arabicReveal = 1; latinReveal = 1
             withAnimation(.easeOut(duration: 0.3)) { backdrop = 1 }
-            await pause(0.9)
+            guard await pause(0.9) else { return }
             onReveal()
             withAnimation(.easeInOut(duration: 0.5)) { lift = 1 }
-            await pause(0.5)
+            guard await pause(0.5) else { return }
             onFinished()
             return
         }
         withAnimation(.easeOut(duration: 0.4)) { backdrop = 1 }
-        await pause(0.25)
+        guard await pause(0.25) else { return }
         withAnimation(.easeInOut(duration: 1.8)) { stroke = 1 }
-        await pause(1.45)
+        guard await pause(1.45) else { return }
         withAnimation(.easeInOut(duration: 0.8)) { fill = 1 }
-        await pause(0.35)
+        guard await pause(0.35) else { return }
         withAnimation(.easeOut(duration: 0.9)) { arabicReveal = 1 }
-        await pause(0.3)
+        guard await pause(0.3) else { return }
         withAnimation(.easeOut(duration: 0.9)) { latinReveal = 1 }
-        await pause(0.75)
+        guard await pause(0.75) else { return }
         withAnimation(.easeInOut(duration: 1.0)) { shimmer = 1.2 }
-        await pause(1.05)
+        guard await pause(1.05) else { return }
         onReveal()
         withAnimation(.easeIn(duration: 1.1)) { lift = 1 }
-        await pause(1.1)
+        guard await pause(1.1) else { return }
         onFinished()
     }
 
-    private func pause(_ seconds: Double) async {
-        try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+    /// Returns false if the intro was dismissed (the view disappeared), so no later step fires.
+    private func pause(_ seconds: Double) async -> Bool {
+        do {
+            try await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+            return true
+        } catch {
+            return false
+        }
     }
 }

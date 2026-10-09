@@ -116,7 +116,7 @@ enum CafeSceneBuilder {
         floor.position = [0, 0, midZ]
         root.addChild(floor)
 
-        let ceiling = ModelEntity(mesh: .generatePlane(width: width, depth: depth), materials: [M.pbr(M.ceiling, roughness: 0.9)])
+        let ceiling = ModelEntity(mesh: .generatePlane(width: width, depth: depth), materials: [M.glow(0xE4DDD0)])
         ceiling.position = [0, h, midZ]
         ceiling.orientation = simd_quatf(angle: .pi, axis: [1, 0, 0])
         root.addChild(ceiling)

@@ -61,6 +61,8 @@ jobs:
           APP=$(find dd/Build/Products -name ORMOR.app -path '*iphonesimulator*' | head -1)
           xcrun simctl boot "$UDID" || true
           xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl terminate "$UDID" com.ormor.cafe || true
+          xcrun simctl uninstall "$UDID" com.ormor.cafe || true
           xcrun simctl install "$UDID" "$APP"
           mkdir -p shots
           shot() { xcrun simctl io "$UDID" screenshot "shots/$1.png" >/dev/null; echo "captured $1"; }
@@ -73,7 +75,7 @@ jobs:
           for spot in table-1 table-2 cashier management; do
             xcrun simctl terminate "$UDID" com.ormor.cafe || true
             xcrun simctl launch "$UDID" com.ormor.cafe -startSpot "$spot"
-            sleep 7; shot "05-$spot"
+            sleep 6; shot "05-$spot"
           done
           xcrun simctl terminate "$UDID" com.ormor.cafe || true
           xcrun simctl launch "$UDID" com.ormor.cafe -startSpot table-3 -language en
